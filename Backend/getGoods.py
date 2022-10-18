@@ -52,3 +52,32 @@ def key2info(keywords):
         except:
             continue
     return json.dumps(infoList)
+
+def info2list(keywords): # key2info对关键词list循环使用
+  List_all = []
+  for i in range(len(keywords)):
+    List_all.append(key2info(keywords[i]))
+  return List_all
+
+def info_optimize(List_all):  # 返回类似商品 不同地点的最低价格
+  item_loc_price = []
+  for i in range (len(info_test)):
+    loc_price = []
+    for k in range(len(info_test[i])):
+      loc_temp = info_test[i][k].get('local')
+      price_temp = info_test[i][k].get('price')
+      url = info_test[i][k].get('webpage')
+      if loc_temp not in [i[0] for i in loc_price]:
+        loc_price.append([loc_temp,price_temp,url])
+        continue
+      else:
+        temp = [i[0] for i in loc_price]
+        index = temp.index(loc_temp)
+        if price_temp < loc_price[index][1]:
+          loc_price[index][1] = price_temp
+          loc_price[index][2] = url
+          continue
+        else:
+          pass
+    item_loc_price.append(loc_price)
+  return item_loc_price
